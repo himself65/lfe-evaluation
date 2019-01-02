@@ -6,27 +6,39 @@
   "author": "Toto Lin <toto@linux.com>",
   "license": "WTF License",
   "scripts": {
-    "dev": "cross-env nodemon app --exec babel-node",
+    "build": "rimraf dist && cross-env vue-cli-service build --name luogu-evaluation src/main.js",
+    "dev": "concurrently \" vue-cli-service serve --port 3004 --copy \" \" nodemon app.js --exec babel-node \" ",
     "test": "cross-env NODE_ENV=test jest"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "socket.io": "^2.2.0"
+    "qs": "^6.6.0",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/node": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
     "@types/body-parser": "^1.17.0",
     "@types/express": "^4.16.0",
     "@types/jest": "^23.3.11",
     "@types/node": "^10.12.18",
     "@types/socket.io": "^2.1.2",
+    "@types/socket.io-client": "^1.4.32",
+    "@vue/cli-plugin-babel": "^3.2.2",
+    "@vue/cli-plugin-eslint": "^3.2.2",
+    "@vue/cli-service": "^3.2.2",
+    "autoprefixer": "^9.4.3",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
+    "concurrently": "^4.1.0",
     "cross-env": "^5.2.0",
+    "css-mqpacker": "^7.0.0",
     "eslint": "^5.11.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-html": "^5.0.0",
@@ -34,8 +46,21 @@
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^5.1.0",
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
-    "regenerator-runtime": "^0.13.1"
+    "regenerator-runtime": "^0.13.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "vue": "^2.5.21",
+    "vue-template-compiler": "^2.5.21",
+    "vuetify": "^1.4.0"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "node_modules/*",
+      "src/*"
+    ],
+    "delay": "2500"
   }
 }

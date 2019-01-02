@@ -1,11 +1,12 @@
 {
   "root": true,
   "parserOptions": {
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "sourceType": "module"
   },
   "extends": [
     "standard",
-    "eslint:recommended"
+    "plugin:vue/recommended"
   ],
   "plugins": [
     "html"
