@@ -10,6 +10,7 @@
           :style="styles"
           :width="boardWidth"
           :height="boardHeight"
+          draggable="true"
           @click="submit"
           @wheel="wheel"
         />
@@ -136,14 +137,13 @@ export default {
   async mounted () {
     // init map
     await axios.get('/board').then(res => {
-      this.render(convertMap(res.data))
+      this.render(convertMap(res.data)) // init
     }).catch(e => console.error(e))
 
     const socket = SocketIO.connect('http://localhost:3003')
-    socket.on('matrix_update', (res) => {
+    socket.on('matrix_update', res => {
       const { x, y, color } = res
-      console.log(res)
-      this.updateMatrix(x, y, color)
+      this.updateMatrix(y, x, color)
     })
   },
 
@@ -171,13 +171,13 @@ export default {
         window.alert('请先选择颜色')
         return
       }
+      const scale = this.scale
       const selected = this.selected
-      const x = e.offsetX
-      const y = e.offsetY
+      const x = parseInt(e.offsetX / scale)
+      const y = parseInt(e.offsetY / scale)
       const data = { x: x, y: y, color: selected }
       await axios.post('/paint', qs.stringify(data), {
-        headers:
-            { 'Content-Type': 'application/x-www-form-urlencoded' }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(res => {
         console.log(res.data)
       })
