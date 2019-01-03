@@ -1,12 +1,19 @@
 <template>
   <v-layout column>
     <v-layout>
-      <canvas
+      <div
         id="lg-board"
-        :ref="name"
-        :width="boardWidth"
-        :height="boardHeight"
-      />
+        :style="size"
+      >
+        <canvas
+          :ref="name"
+          :style="styles"
+          :width="boardWidth"
+          :height="boardHeight"
+          @click="submit"
+          @wheel="wheel"
+        />
+      </div>
       <p class="log">
         还剩10分钟
       </p>
@@ -52,18 +59,21 @@
       <v-btn
         color="blue darken-1"
         dark
+        @click="zoom(1)"
       >
         全部显示
       </v-btn>
       <v-btn
         color="blue lighten-1"
         dark
+        @click="zoom(5)"
       >
         放大5x
       </v-btn>
       <v-btn
         color="green lighten-1"
         dark
+        @click="zoom(10)"
       >
         放大10x
       </v-btn>
@@ -78,9 +88,9 @@ import qs from 'qs'
 import { boardWidth, boardHeight } from '../../config'
 
 const colors = [
+  { color: '#000' },
   { color: '#fff' },
-  { color: '#777' },
-  { color: '#000' }
+  { color: '#777' }
 ]
 
 export default {
@@ -91,14 +101,35 @@ export default {
       boardHeight,
       boardWidth,
       colors,
-      selected: -1
+      selected: 0,
+      scale: 5,
+      map: [boardWidth][boardHeight],
+      top: 0,
+      left: 0
+    }
+  },
+
+  computed: {
+    styles () {
+      return {
+        'top': this.top,
+        'left': this.left
+      }
+    },
+
+    size () {
+      return {
+        'width': `${this.boardWidth * 1.2}px`,
+        'height': `${this.boardHeight * 1.2}px`
+      }
+    },
+
+    ref () {
+      return this.$refs[this.name]
     }
   },
 
   mounted () {
-    const board = this.$refs[this.name]
-    board.addEventListener('click', async (e) => this.submit(e))
-
     const socket = SocketIO.connect('http://localhost:3003')
     socket.on('matrix_update', (res) => {
       const { x, y, color } = res
@@ -107,8 +138,20 @@ export default {
   },
 
   methods: {
+    render (map) {
+      const canvas = this.ref
+      const ctx = canvas.getContext('2d')
+      const scale = this.scale
+      for (let i = 0; i <= this.boardWidth; ++i) {
+        for (let j = 0; j <= this.boardHeight; ++j) {
+          ctx.fillStyle = map[i][j]
+          ctx.fillRect(j * scale, i * scale, scale, scale)
+        }
+      }
+    },
+
     async submit (e) {
-      if (this.selected === -1) {
+      if (!this.colors[this.selected]) {
         window.alert('请先选择颜色')
         return
       }
@@ -125,11 +168,51 @@ export default {
     },
 
     updateMatrix (x, y, color) {
-
+      if (this.dragged) {
+        this.dragged = false
+        return
+      }
+      const canvas = this.ref
+      const ctx = canvas.getContext('2d')
+      ctx.save()
+      ctx.fillStyle = color
+      ctx.fillRect(x * 5, y * 5, 5, 5)
     },
 
-    zoom () {
+    zoom (ratio) {
+      console.log(ratio)
+      this.scale = ratio
+      this.ref.width = this.boardWidth * this.scale
+      if (ratio === 1) {
+        this.top = this.left = 0
+      }
+    },
 
+    async wheel (e) {
+      console.log(e)
+      const scale = this.scale
+      const delta = event.deltaY
+      const y = parseInt(event.offsetY / scale)
+      const x = parseInt(event.offsetX / scale)
+      console.log(event)
+      const convert = (delta, scale) => {
+        if (delta > 0) {
+          return {
+            10: 5,
+            5: 1
+          }[scale]
+        } else {
+          return {
+            1: 5,
+            5: 10
+          }[scale]
+        }
+      }
+      this.zoom(convert(delta, scale) || scale)
+      if (scale !== 1) {
+        this.top = -y * scale + 200
+        this.left = -x * scale + 400
+      }
     }
   }
 }
@@ -137,6 +220,7 @@ export default {
 
 <style lang="stylus" scoped>
   #lg-board {
+    overflow: auto
     border: 1px solid
     margin: 1rem
     margin-left: 0
