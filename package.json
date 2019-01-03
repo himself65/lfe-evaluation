@@ -8,7 +8,10 @@
   "scripts": {
     "build": "rimraf dist && cross-env vue-cli-service build --name luogu-evaluation src/main.js",
     "dev": "concurrently \" vue-cli-service serve --port 3004 --copy \" \" nodemon app.js --exec babel-node \" ",
-    "test": "cross-env NODE_ENV=test jest"
+    "test": "node build/run-tests.js",
+    "test:unix": "cross-env NODE_ENV=test jest",
+    "test:win32": "cross-env NODE_ENV=test jest -i",
+    "test:coverage": "yarn test --coverage"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -31,7 +34,9 @@
     "@types/socket.io-client": "^1.4.32",
     "@vue/cli-plugin-babel": "^3.2.2",
     "@vue/cli-plugin-eslint": "^3.2.2",
+    "@vue/cli-plugin-unit-jest": "^3.2.3",
     "@vue/cli-service": "^3.2.2",
+    "@vue/test-utils": "^1.0.0-beta.28",
     "autoprefixer": "^9.4.3",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",

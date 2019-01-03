@@ -5,8 +5,8 @@ module.exports = {
     '<rootDir>/tests/unit'
   ],
   moduleFileExtensions: [
-    "js",
-    "json"
+    'js',
+    'json'
   ],
   moduleDirectories: ['node_modules'],
   moduleNameMapper: {
@@ -15,15 +15,15 @@ module.exports = {
     '^src/(.*)$': '<rootDir>/src/$1'
   },
   transform: {
-    "\\.(js)$": "babel-jest"
+    '\\.(js)$': 'babel-jest'
   },
   collectCoverageFrom: [
     'app.js',
-    "src/**/*.{js}",
-    "!**/node_modules/**"
+    'src/**/*.{js}',
+    '!**/node_modules/**'
   ],
   transformIgnorePatterns: [
     'node_modules'
   ],
-  coverageDirectory: "./coverage/"
+  coverageDirectory: './coverage/'
 }

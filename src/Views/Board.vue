@@ -14,9 +14,9 @@
           @wheel="wheel"
         />
       </div>
-      <p class="log">
+      <span class="log">
         还剩10分钟
-      </p>
+      </span>
     </v-layout>
     <v-layout>
       <div
@@ -83,6 +83,7 @@
 
 <script>
 import SocketIO from 'socket.io-client'
+import { convertMap } from '../utils/helpers'
 import axios from 'axios'
 import qs from 'qs'
 import { boardWidth, boardHeight } from '../../config'
@@ -103,17 +104,20 @@ export default {
       colors,
       selected: 0,
       scale: 5,
-      map: [boardWidth][boardHeight],
       top: 0,
-      left: 0
+      left: 0,
+      map: [boardWidth].map(() => {
+        return [boardHeight].fill(colors[0].color)
+      }),
+      dragged: false
     }
   },
 
   computed: {
     styles () {
       return {
-        'top': this.top,
-        'left': this.left
+        'top': `${this.top}px`,
+        'left': `${this.left}px`
       }
     },
 
@@ -129,22 +133,34 @@ export default {
     }
   },
 
-  mounted () {
+  async mounted () {
+    // init map
+    await axios.get('/board').then(res => {
+      this.render(convertMap(res.data))
+    }).catch(e => console.error(e))
+
     const socket = SocketIO.connect('http://localhost:3003')
     socket.on('matrix_update', (res) => {
       const { x, y, color } = res
+      console.log(res)
       this.updateMatrix(x, y, color)
     })
   },
 
   methods: {
     render (map) {
+      if (!Array.isArray(map) &&
+          (typeof map === 'string' || map instanceof String)) {
+        // not a Array
+        // or is a string
+        map = convertMap(map)
+      }
       const canvas = this.ref
       const ctx = canvas.getContext('2d')
       const scale = this.scale
-      for (let i = 0; i <= this.boardWidth; ++i) {
-        for (let j = 0; j <= this.boardHeight; ++j) {
-          ctx.fillStyle = map[i][j]
+      for (let i = 0; i < this.boardHeight; ++i) {
+        for (let j = 0; j < this.boardWidth; ++j) {
+          ctx.fillStyle = colors[map[i][j]].color
           ctx.fillRect(j * scale, i * scale, scale, scale)
         }
       }
@@ -167,7 +183,7 @@ export default {
       })
     },
 
-    updateMatrix (x, y, color) {
+    updateMatrix (y, x, idx) {
       if (this.dragged) {
         this.dragged = false
         return
@@ -175,12 +191,11 @@ export default {
       const canvas = this.ref
       const ctx = canvas.getContext('2d')
       ctx.save()
-      ctx.fillStyle = color
+      ctx.fillStyle = this.colors[idx].color
       ctx.fillRect(x * 5, y * 5, 5, 5)
     },
 
     zoom (ratio) {
-      console.log(ratio)
       this.scale = ratio
       this.ref.width = this.boardWidth * this.scale
       if (ratio === 1) {
@@ -188,7 +203,7 @@ export default {
       }
     },
 
-    async wheel (e) {
+    wheel (e) {
       console.log(e)
       const scale = this.scale
       const delta = event.deltaY
