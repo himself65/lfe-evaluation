@@ -1,48 +1,20 @@
-# 洛谷前端考核项目
+# lfe-evaluation
 
-------------------
-## 项目目标
+[![Build Status](https://www.travis-ci.com/Himself65/lfe-evaluation.svg?branch=master)](https://www.travis-ci.com/Himself65/lfe-evaluation)
 
-请您根据提供的后端接口，复刻 [洛谷冬日绘板](https://www.luogu.org/paintBoard) 的前端部分。
+## Usage
 
-绘板是一个 200x100 的画布，有黑白灰三种颜色可选，默认全黑。
+```bash
+# 进入开发环境
+yarn dev
+ 
+# 打包前端项目，输出在 /dist 下
+yarn build
 
-用户可在颜色选择器中选择颜色，并点击画布上的像素进行绘制。
+# 仅开启后端环境
+yarn serve
+```
 
-绘板上的画布可放大（通过鼠标滚轮）、拖动。
+## LICENSE
 
-倒计时冷却功能无需实现。
-
-## 如何启动开发服务器
-
-`yarn dev` 监听 `:3003` 端口。
-
-## 颜色代码对应
-
-- `0` 黑色
-- `1` 白色
-- `2` 灰色
-
-## 接口文档
-
-_具体请阅读 `app.js` 。_
-
-`GET /board`
-
-获取当前画布，是一串以 `0` `1` `2` 组成的字符串，表示画板的每个像素。
-
-`POST /paint` `x=?&y=?&color=?`
-
-在画布的指定坐标上绘制指定颜色。绘制成功后，会通过 Socket.IO 服务器，推送一条消息 `io.emit('matrix_update', { x, y, color })` 。
-
-## 提交方式
-
-请 Clone 这个代码库到本地，完成时自己创建一个新的库并提交至 GitHub 。
-
-（为保护您的隐私，我们不建议直接 Fork 该库。）
-
-我们同时会考察您的项目管理水平，所以请保持良好的代码和版本管理习惯。
-
-## 声明
-
-本项目仅供考核使用，洛谷不会使用您的代码进行任何考核以外的商业和非商业用途。
+Follow [WTF LICENSE](/)
