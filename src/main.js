@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import HomeView from './Views/Home'
+import HomeView from './views/Home'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
