@@ -11,8 +11,8 @@
           :width="boardWidth"
           :height="boardHeight"
           draggable="true"
-          @mousedown=""
-          @mouseleave=""
+          @mousedown="startDrag"
+          @mouseleave="stopDrag"
           @click="submit"
           @wheel="wheel"
         />
@@ -244,12 +244,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  #lg-board {
-    overflow: auto
-    border: 1px solid
-    margin: 1rem
-    margin-left: 0
-  }
 
   .palette {
     padding: .5rem
