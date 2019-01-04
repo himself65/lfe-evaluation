@@ -11,8 +11,9 @@
           :width="boardWidth"
           :height="boardHeight"
           draggable="true"
-          @mousedown="startDrag"
-          @mouseleave="stopDrag"
+          @dragstart="handleDragStart"
+          @drag="handleDrag"
+          @dragend="handleDragEnd"
           @click="submit"
           @wheel="wheel"
         />
@@ -107,21 +108,30 @@ export default {
       colors,
       selected: 0,
       scale: 5,
-      top: 0,
-      left: 0,
       map: [boardWidth].map(() => {
         return [boardHeight].fill(colors[0].color)
       }),
-      dragged: false
+      clicked: false,
+      dragged: false,
+      mouseDownLocation: undefined,
+      canvasLocation: {
+        x: 0,
+        y: 0
+      }
     }
   },
 
   computed: {
     styles () {
-      return {
-        'top': `${this.top}px`,
-        'left': `${this.left}px`
+      const styles = {
+        'position': 'relative',
+        'left': `${this.canvasLocation.x}px`,
+        'top': `${this.canvasLocation.y}px`
       }
+      if (this.dragged) {
+        styles['cursor'] = 'move'
+      }
+      return styles
     },
 
     size () {
@@ -173,6 +183,9 @@ export default {
         window.alert('请先选择颜色')
         return
       }
+      if (this.dragged) {
+        return
+      }
       const scale = this.scale
       const selected = this.selected
       const x = parseInt(e.offsetX / scale)
@@ -185,12 +198,16 @@ export default {
       })
     },
 
-    startDrag () {
-      // todo
+    handleDragStart (e) {
+      this.dragged = true
     },
 
-    stopDrag () {
-      // todo
+    handleDrag (e) {
+
+    },
+
+    handleDragEnd (e) {
+      this.dragged = false
     },
 
     updateMatrix (y, x, idx) {
@@ -209,7 +226,7 @@ export default {
       this.scale = ratio
       this.ref.width = this.boardWidth * this.scale
       if (ratio === 1) {
-        this.top = this.left = 0
+        this.canvasLocation = { x: 0, y: 0 }
       }
     },
 
@@ -235,8 +252,8 @@ export default {
       }
       this.zoom(convert(delta, scale) || scale)
       if (scale !== 1) {
-        this.top = -y * scale + 200
-        this.left = -x * scale + 400
+        this.canvasLocation.x = -y * scale + 200
+        this.canvasLocation.y = -x * scale + 400
       }
     }
   }
