@@ -11,6 +11,8 @@
           :width="boardWidth"
           :height="boardHeight"
           draggable="true"
+          @mousedown=""
+          @mouseleave=""
           @click="submit"
           @wheel="wheel"
         />
@@ -181,6 +183,14 @@ export default {
       }).then(res => {
         console.log(res.data)
       })
+    },
+
+    startDrag () {
+      // todo
+    },
+
+    stopDrag () {
+      // todo
     },
 
     updateMatrix (y, x, idx) {
