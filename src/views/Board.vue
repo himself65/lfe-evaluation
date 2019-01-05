@@ -3,20 +3,22 @@
     <v-layout>
       <div
         id="lg-board"
-        :style="size"
+        :style="styles"
       >
-        <canvas
-          :ref="name"
-          :style="styles"
-          :width="boardWidth"
-          :height="boardHeight"
-          draggable="true"
-          @dragstart="handleDragStart"
-          @drag="handleDrag"
-          @dragend="handleDragEnd"
-          @click="submit"
-          @wheel="wheel"
-        />
+        <vue-draggable-resizable
+          :w="boardWidth"
+          :h="boardHeight"
+          :resizable="false"
+        >
+          <canvas
+            :ref="name"
+            :style="{
+              'width' : width + 'px'
+            }"
+            @click="submit"
+            @wheel="wheel"
+          />
+        </vue-draggable-resizable>
       </div>
       <span class="log">
         还剩10分钟
@@ -86,6 +88,7 @@
 </template>
 
 <script>
+import VueDraggableResizable from 'vue-draggable-resizable'
 import SocketIO from 'socket.io-client'
 import { convertMap } from '../utils/helpers'
 import axios from 'axios'
@@ -100,6 +103,11 @@ const colors = [
 
 export default {
   name: 'Board',
+
+  components: {
+    VueDraggableResizable
+  },
+
   data () {
     return {
       name: 'lg-board',
@@ -114,30 +122,18 @@ export default {
       clicked: false,
       dragged: false,
       mouseDownLocation: undefined,
-      canvasLocation: {
-        x: 0,
-        y: 0
-      }
+      width: boardWidth,
+      X: 0,
+      Y: 0
     }
   },
 
   computed: {
     styles () {
-      const styles = {
-        'position': 'relative',
-        'left': `${this.canvasLocation.x}px`,
-        'top': `${this.canvasLocation.y}px`
-      }
-      if (this.dragged) {
-        styles['cursor'] = 'move'
-      }
-      return styles
-    },
-
-    size () {
       return {
-        'width': `${this.boardWidth * 1.2}px`,
-        'height': `${this.boardHeight * 1.2}px`
+        'position': 'relative',
+        'width': `800px`,
+        'height': `500px`
       }
     },
 
@@ -190,24 +186,13 @@ export default {
       const selected = this.selected
       const x = parseInt(e.offsetX / scale)
       const y = parseInt(e.offsetY / scale)
+      console.log(e.offsetX, e.offsetY)
       const data = { x: x, y: y, color: selected }
       await axios.post('/paint', qs.stringify(data), {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(res => {
         console.log(res.data)
       })
-    },
-
-    handleDragStart (e) {
-      this.dragged = true
-    },
-
-    handleDrag (e) {
-
-    },
-
-    handleDragEnd (e) {
-      this.dragged = false
     },
 
     updateMatrix (y, x, idx) {
@@ -224,9 +209,9 @@ export default {
 
     zoom (ratio) {
       this.scale = ratio
-      this.ref.width = this.boardWidth * this.scale
+      this.width = this.boardWidth * ratio
       if (ratio === 1) {
-        this.canvasLocation = { x: 0, y: 0 }
+        this.X = this.Y = 0
       }
     },
 
@@ -252,8 +237,8 @@ export default {
       }
       this.zoom(convert(delta, scale) || scale)
       if (scale !== 1) {
-        this.canvasLocation.x = -y * scale + 200
-        this.canvasLocation.y = -x * scale + 400
+        this.X = -y * scale + 200
+        this.Y = -x * scale + 400
       }
     }
   }
@@ -261,6 +246,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  #lg-board {
+    padding: auto
+    overflow: auto
+  }
 
   .palette {
     padding: .5rem

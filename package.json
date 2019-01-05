@@ -22,7 +22,8 @@
     "express": "^4.16.4",
     "qs": "^6.6.0",
     "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0"
+    "socket.io-client": "^2.2.0",
+    "vue-draggable-resizable": "^1.7.5"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

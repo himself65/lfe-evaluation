@@ -9813,6 +9813,11 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-draggable-resizable@^1.7.5:
+  version "1.7.5"
+  resolved "http://registry.npm.taobao.org/vue-draggable-resizable/download/vue-draggable-resizable-1.7.5.tgz#25a42d6e2400dde11ee0e42cb6760f402380c81e"
+  integrity sha1-JaQtbiQA3eEe4OQstnYPQCOAyB4=
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "http://registry.npm.taobao.org/vue-eslint-parser/download/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
