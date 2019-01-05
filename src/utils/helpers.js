@@ -1,4 +1,4 @@
-export function convertMap (map) {
+export function dataConvertToMap (map) {
   const res = []
   map.trim().split('\n').forEach((v, k) => {
     res[k] = new Proxy({ value: v }, {

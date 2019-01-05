@@ -1,4 +1,4 @@
-import { convertMap } from 'src/utils/helpers'
+import { dataConvertToMap } from 'src/utils/helpers'
 
 it('should convert map', () => {
   let res =
@@ -6,7 +6,7 @@ it('should convert map', () => {
     '00000\n' +
     '11111\n' +
     '00000\n'
-  const map = convertMap(res)
+  const map = dataConvertToMap(res)
   expect(map[0][1]).toEqual(1)
   expect(map[2][0]).toEqual(1)
 })
