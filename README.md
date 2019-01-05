@@ -10,7 +10,7 @@
 ## Usage
 
 ```bash
-# 进入开发环境
+# 进入开发环境，包括后端环境
 yarn dev
  
 # 打包前端项目，输出在 /dist 下
@@ -20,6 +20,62 @@ yarn build
 yarn serve
 ```
 
+## Docs
+
+`LuoguDrawBoard.vue`
+
+- `selectedColor`: **required** 用户选中颜色
+
+- `name` **default**: `lg-board` 画板的ID
+
+- `w` **default**: `800` 最大画板宽度
+
+- `h` **default**: `500` 最大画板高度
+
+- `boardWidth` **required** 画板宽度
+
+- `boardHeight` **required** 画板高度
+
+- `colors` **required** `type Array` 下标对应的颜色
+
+- `socketUrl` **required** socketIO 连接到的地址
+
+- `postUrl` **required** 推送颜色更新的地址
+
+- `boardUrl` **required** 获取画板信息的地址
+
+---
+
+### Example
+
+```vue
+<luogu-draw-board
+  ref="drawBoard"
+  v-model="selectedColor"
+  :w="500"
+  :h="300"
+  :board-height="boardHeight"
+  :board-width="boardWidth"
+  :colors="colors"
+  socket-url="http://localhost:3003"
+  post-url="/paint"
+  board-url="/board"
+/>
+```
+```javascript
+export default {
+  data () {
+    const colors = ['#000', '#fff', '#777']
+    return {
+      selectedColor: 0,
+      boardHeight: 100,
+      boardWidth: 200,
+      colors
+    }
+  }
+}
+```
+
 ## LICENSE
 
-Follow [WTF LICENSE](/LICENSE)
+Follow [Apache License 2.0](/LICENSE)
