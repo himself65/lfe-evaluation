@@ -94,7 +94,7 @@ export default {
   data () {
     return {
       scale: 5,
-      map: undefined
+      map: new Array(this.boardHeight).fill(null).map(() => new Array(this.boardWidth).fill(0))
     }
   },
 
@@ -186,6 +186,7 @@ export default {
       const scale = this.scale
       ctx.save()
       ctx.fillStyle = color
+      this.map[y][x] = idx
       ctx.fillRect(x * scale, y * scale, scale, scale)
     },
 
