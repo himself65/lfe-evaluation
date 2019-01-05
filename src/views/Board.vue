@@ -15,6 +15,7 @@
             :width="width"
             :height="height"
             @click="submit"
+            @wheel="wheel"
           />
         </vue-draggable-resizable>
       </div>
@@ -63,21 +64,21 @@
       <v-btn
         color="blue darken-1"
         dark
-        @click="scale = 1"
+        @click="zoom(1)"
       >
         全部显示
       </v-btn>
       <v-btn
         color="blue lighten-1"
         dark
-        @click="scale = 5"
+        @click="zoom(5)"
       >
         放大5x
       </v-btn>
       <v-btn
         color="green lighten-1"
         dark
-        @click="scale = 10"
+        @click="zoom(10)"
       >
         放大10x
       </v-btn>
@@ -107,10 +108,6 @@ export default {
   },
 
   data () {
-    const map = [boardWidth].map(() => {
-      return [boardHeight].fill(colors[0].color)
-    })
-
     return {
       name: 'lg-board',
       boardHeight, // default height
@@ -118,7 +115,7 @@ export default {
       colors, // color items
       selected: 0, // selected color index
       scale: 5, // map scale
-      map: map
+      map: undefined
     }
   },
 
@@ -144,30 +141,41 @@ export default {
     }
   },
 
+  watch: {
+    scale (val, oldVal) {
+      if (val === oldVal) {
+        return
+      }
+      this.$nextTick(() => {
+        this.render(this.map, val)
+      })
+    }
+  },
+
   async mounted () {
     // init map
     await axios.get('/board').then(res => {
       return dataConvertToMap(res.data)
     }).then(data => {
+      this.map = data
       this.render(data) // init
     }).catch(e => console.error(e))
 
     const socket = SocketIO.connect('http://localhost:3003')
     socket.on('matrix_update', res => {
       const { x, y, color } = res
-      console.log(`get ${x} ${y} draw ${color}`)
       this.updateMatrix(y, x, color)
     })
   },
 
   methods: {
-    render (map) {
+    render (map, scale = 5) {
       const canvas = this.ref
       const ctx = canvas.getContext('2d')
       for (let i = 0; i < this.boardHeight; ++i) {
         for (let j = 0; j < this.boardWidth; ++j) {
           ctx.fillStyle = colors[map[i][j]].color
-          ctx.fillRect(j * 5, i * 5, 5, 5)
+          ctx.fillRect(j * scale, i * scale, scale, scale)
         }
       }
     },
@@ -179,7 +187,6 @@ export default {
       }
       const selected = this.selected
       const { x, y } = this.getPixelPosition(e.offsetX, e.offsetY)
-      console.log(e.offsetX, e.offsetY, x, y)
       const data = { x: x, y: y, color: selected }
       await axios.post('/paint', qs.stringify(data), {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -197,10 +204,36 @@ export default {
     updateMatrix (y, x, idx) {
       const canvas = this.ref
       const ctx = canvas.getContext('2d')
-      console.log(`draw ${x} ${y}, size 5`)
+      const color = this.colors[idx].color
+      const scale = this.scale
       ctx.save()
-      ctx.fillStyle = this.colors[idx].color
-      ctx.fillRect(x * 5, y * 5, 5, 5)
+      ctx.fillStyle = color
+      ctx.fillRect(x * scale, y * scale, scale, scale)
+    },
+
+    zoom (ratio) {
+      this.scale = ratio
+    },
+
+    wheel (e) {
+      const scale = this.scale
+      const delta = e.deltaY
+      const convert = (delta, scale) => {
+        if (delta > 0) {
+          // increase
+          return {
+            10: 5,
+            5: 1
+          }[scale]
+        } else {
+          // decrease
+          return {
+            1: 5,
+            5: 10
+          }[scale]
+        }
+      }
+      this.zoom(convert(delta, scale) || scale)
     }
   }
 }
