@@ -1,10 +1,8 @@
 {
-  "name": "lfe-evaluation",
-  "version": "1.0.0",
-  "description": "Luogu Frontend Interview Evaluation Problem",
-  "main": "app.js",
-  "author": "Toto Lin <toto@linux.com>",
-  "license": "WTF License",
+  "name": "lfe-evaluation-example",
+  "private": true,
+  "author": "himself65 <himself6565@gmail.com>",
+  "license": "MIT License",
   "scripts": {
     "lint": "eslint --ext .vue,.js src/",
     "lint-fix": "yarn lint --fix",

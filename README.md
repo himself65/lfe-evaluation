@@ -1,6 +1,8 @@
-# lfe-evaluation
+# lfe-evaluation-example
 
-[![Build Status](https://www.travis-ci.com/Himself65/lfe-evaluation.svg?branch=master)](https://www.travis-ci.com/Himself65/lfe-evaluation)
+> `Vue.js` 实现[洛谷2019前端考核项目](https://github.com/luogu-dev/lfe-evaluation)
+
+[![Build Status](https://www.travis-ci.com/Himself65/lfe-evaluation-example.svg?branch=master)](https://www.travis-ci.com/Himself65/lfe-evaluation-example)
 
 ## Usage
 
@@ -17,4 +19,4 @@ yarn serve
 
 ## LICENSE
 
-Follow [WTF LICENSE](/)
+Follow [WTF LICENSE](/LICENSE)
