@@ -2,7 +2,10 @@
   <v-layout column>
     <v-layout>
       <luogu-draw-board
+        ref="drawBoard"
         v-model="selectedColor"
+        :w="500"
+        :h="300"
         :board-height="boardHeight"
         :board-width="boardWidth"
         :colors="colors"
@@ -55,21 +58,21 @@
       <v-btn
         color="blue darken-1"
         dark
-        @click="selectedColor = 1"
+        @click="zoom(1)"
       >
         全部显示
       </v-btn>
       <v-btn
         color="blue lighten-1"
         dark
-        @click="selectedColor = 5"
+        @click="zoom(5)"
       >
         放大5x
       </v-btn>
       <v-btn
         color="green lighten-1"
         dark
-        @click="selectedColor = 10"
+        @click="zoom(10)"
       >
         放大10x
       </v-btn>
@@ -92,6 +95,9 @@ export default {
       colors,
       selectedColor: 0
     }
+  },
+  methods: {
+    zoom (val) { this.$refs.drawBoard.$emit('zoom', val) }
   }
 }
 </script>
