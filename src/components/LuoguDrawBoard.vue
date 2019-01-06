@@ -1,24 +1,3 @@
-<template>
-  <div
-    :style="styles"
-    class="lg-board"
-  >
-    <vue-draggable-resizable
-      :w="width"
-      :h="height"
-      :resizable="false"
-    >
-      <canvas
-        :ref="name"
-        :width="width"
-        :height="height"
-        @click="submit"
-        @wheel="wheel"
-      />
-    </vue-draggable-resizable>
-  </div>
-</template>
-
 <script>
 import axios from 'axios'
 import qs from 'qs'
@@ -109,6 +88,12 @@ export default {
 
     height () {
       return this.boardHeight * this.scale
+    },
+
+    classes () {
+      return {
+        'lg-board': true
+      }
     },
 
     styles () {
@@ -218,6 +203,29 @@ export default {
       }
       this.scale = convert(delta, scale) || scale
     }
+  },
+
+  render () {
+    return (
+      <div
+        style={this.styles}
+        class={this.classes}
+      >
+        <vue-draggable-resizable
+          w={this.width}
+          h={this.height}
+          resizable={false}
+        >
+          <canvas
+            ref={this.name}
+            width={this.width}
+            height={this.height}
+            onClick={this.submit}
+            onWheel={this.wheel}
+          />
+        </vue-draggable-resizable>
+      </div>
+    )
   }
 }
 </script>

@@ -22,4 +22,4 @@ jobs:
     - stage: build
       name: 'Build test'
       script:
-        - yarn run build
+        - yarn run build:all
