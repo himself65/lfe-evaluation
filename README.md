@@ -24,33 +24,42 @@ yarn serve
 
 `LuoguDrawBoard.vue`
 
-- `selectedColor`: **required** 用户选中颜色
+`props`:
 
-- `name` **default**: `lg-board` 画板的ID
+  - `selectedColor`: **required** 用户选中颜色
+  
+  - `name` **default**: `lg-board` 画板的ID
+  
+  - `w` **default**: `800` 最大画板宽度
+  
+  - `h` **default**: `500` 最大画板高度
+  
+  - `boardWidth` **required**: 画板宽度
+  
+  - `boardHeight` **required**: 画板高度
+  
+  - `colors` **required** `type Array`: 下标对应的颜色
+  
+  - `socketUrl` **required**: socketIO 连接到的地址
+  
+  - `postUrl` **required**: 推送颜色更新的地址
+  
+  - `boardUrl` **required**: 获取画板信息的地址
 
-- `w` **default**: `800` 最大画板宽度
-
-- `h` **default**: `500` 最大画板高度
-
-- `boardWidth` **required** 画板宽度
-
-- `boardHeight` **required** 画板高度
-
-- `colors` **required** `type Array` 下标对应的颜色
-
-- `socketUrl` **required** socketIO 连接到的地址
-
-- `postUrl` **required** 推送颜色更新的地址
-
-- `boardUrl` **required** 获取画板信息的地址
-
+`event`:
+  
+  - `zoom`: 画板缩放
+  
+  ```javascript
+  this.refs['xxx'].emit('zoom', 10)
+  ``` 
+  
 ---
 
 ### Example
 
 ```vue
 <luogu-draw-board
-  ref="drawBoard"
   v-model="selectedColor"
   :w="500"
   :h="300"
