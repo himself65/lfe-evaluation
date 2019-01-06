@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint --ext .vue,.js src/",
     "lint-fix": "yarn lint --fix",
-    "build": "rimraf dist && cross-env vue-cli-service build --name luogu-evaluation src/main.js",
+    "build": "rimraf dist/app && cross-env vue-cli-service build --dest dist/app --name luogu-evaluation src/main.js",
+    "build:components": "rimraf dist/modules && cross-env vue-cli-service build --dest dist/modules  --target lib --name luogu-draw-board src/modules.js",
     "dev": "concurrently \" vue-cli-service serve --port 3004 --copy \" \" yarn serve \" ",
     "serve": "nodemon app.js --exec babel-node",
     "test": "node build/run-tests.js",
