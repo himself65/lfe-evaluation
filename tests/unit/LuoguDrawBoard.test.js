@@ -1,20 +1,23 @@
 import { mount } from '@vue/test-utils'
 import LuoguDrawBoard from 'src/components/LuoguDrawBoard.vue'
 
-const wrapper = mount(LuoguDrawBoard, {
-  propsData: {
-    selectedColor: 0,
-    name: 'lg-test',
-    boardWidth: 200,
-    boardHeight: 100,
-    colors: ['#fff', '#333', '#000'],
-    socketUrl: 'http://localhost:3003',
-    postUrl: '/paint',
-    boardUrl: '/board'
-  }
-})
+const generateWrapper = () => {
+  return mount(LuoguDrawBoard, {
+    propsData: {
+      selectedColor: 0,
+      name: 'lg-test',
+      boardWidth: 200,
+      boardHeight: 100,
+      colors: ['#fff', '#333', '#000'],
+      socketUrl: 'http://localhost:3003',
+      postUrl: '/paint',
+      boardUrl: '/board'
+    }
+  })
+}
 
 it('should transfer props success', () => {
+  const wrapper = generateWrapper()
   expect(wrapper.props().name).toBe('lg-test')
   expect(wrapper.props().selectedColor).toBe(0)
   expect(wrapper.props().boardWidth).toBe(200)
@@ -25,7 +28,8 @@ it('should transfer props success', () => {
   expect(wrapper.props().boardUrl).toBe('/board')
 })
 
-it('should set correct value', async () => {
+it('should set correct value', () => {
+  const wrapper = generateWrapper()
   wrapper.vm.$emit('zoom', 10)
   expect(wrapper.emitted('zoom')).toBeTruthy()
   expect(wrapper.emitted().zoom.length).toEqual(1)
@@ -34,6 +38,7 @@ it('should set correct value', async () => {
 })
 
 it('should have correct data', () => {
+  const wrapper = generateWrapper()
   expect(wrapper.vm.map).toBeInstanceOf(Array)
   expect(wrapper.vm.scale).toEqual(5)
 })
