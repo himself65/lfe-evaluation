@@ -130,6 +130,12 @@ export default {
     }
   },
 
+  created () {
+    this.$on('zoom', (scale) => {
+      this.scale = parseInt(scale)
+    })
+  },
+
   async mounted () {
     await axios.get(this.boardUrl).then(res => {
       return dataConvertToMap(res.data)
@@ -146,12 +152,6 @@ export default {
       if (res.status === 200) {
         this.$emit('update', res)
       }
-    })
-
-    this.$nextTick(() => {
-      this.$on('zoom', (scale) => {
-        this.scale = parseInt(scale)
-      })
     })
   },
 

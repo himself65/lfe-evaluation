@@ -6,8 +6,10 @@ module.exports = {
   ],
   moduleFileExtensions: [
     'js',
-    'json'
+    'json',
+    'vue'
   ],
+  setupFiles: ['jest-canvas-mock'],
   moduleDirectories: ['node_modules'],
   moduleNameMapper: {
     '^@/test$': '<rootDir>/test/index.js',
@@ -15,7 +17,8 @@ module.exports = {
     '^src/(.*)$': '<rootDir>/src/$1'
   },
   transform: {
-    '\\.(js)$': 'babel-jest'
+    '\\.(js)$': 'babel-jest',
+    '\\.(vue)$': 'vue-jest'
   },
   collectCoverageFrom: [
     'app.js',
