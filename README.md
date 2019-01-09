@@ -2,7 +2,8 @@
 
 > `Vue.js` 实现[洛谷2019前端考核项目](https://github.com/luogu-dev/lfe-evaluation)
 
-[![Build Status](https://www.travis-ci.com/Himself65/lfe-evaluation-example.svg?branch=master)](https://www.travis-ci.com/Himself65/lfe-evaluation-example)
+[![Build Status](https://www.travis-ci.com/Himself65/lfe-evaluation-example.svg?token=RkLDj4gGaR4csgCAQR3y&branch=master)](https://www.travis-ci.com/Himself65/lfe-evaluation-example)
+[![codecov](https://codecov.io/gh/Himself65/lfe-evaluation-example/branch/master/graph/badge.svg?token=tr130YwUXY)](https://codecov.io/gh/Himself65/lfe-evaluation-example)
 [![License](https://img.shields.io/github/license/himself65/lfe-evaluation-example.svg)](htttps:://github.com/himself65/lfe-evaluation-example)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/himself65/lfe-evaluation-example.svg)](htttps:://github.com/himself65/lfe-evaluation-example)
 [![GitHub top language](https://img.shields.io/github/languages/top/himself65/lfe-evaluation-example.svg)](htttps:://github.com/himself65/lfe-evaluation-example)
