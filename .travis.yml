@@ -15,11 +15,16 @@ install:
 jobs:
   include:
     - stage: test
-      name: 'Lint and test'
+      name: 'Lint and Test'
+      before_script:
+        - yarn global add codecov
       script:
         - yarn run lint
         - yarn run test
+        - yarn run test:coverage
+      after_success:
+        - codecov
     - stage: build
-      name: 'Build test'
+      name: 'Build Test'
       script:
-        - yarn run build:all
+        - yarn run build
